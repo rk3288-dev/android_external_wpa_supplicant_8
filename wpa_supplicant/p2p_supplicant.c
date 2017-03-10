@@ -3822,7 +3822,8 @@ int wpas_p2p_add_p2pdev_interface(struct wpa_supplicant *wpa_s,
 		iface.confname = conf_p2p_dev;
 		iface.ctrl_interface = NULL;
 	} else {
-		iface.confname = wpa_s->confname;
+		//iface.confname = wpa_s->confname;
+		iface.confname = "/data/misc/wifi/p2p_supplicant.conf";
 		iface.ctrl_interface = wpa_s->conf->ctrl_interface;
 	}
 	iface.conf_p2p_dev = NULL;
@@ -4739,12 +4740,12 @@ static int wpas_p2p_setup_freqs(struct wpa_supplicant *wpa_s, int freq,
 
 	/* We have a candidate frequency to use */
 	if (best_freq > 0) {
-		if (*pref_freq == 0 && num_unused > 0) {
+		/*if (*pref_freq == 0 && num_unused > 0) {
 			wpa_printf(MSG_DEBUG, "P2P: Try to prefer a frequency (%u MHz) we are already using",
 				   best_freq);
 			*pref_freq = best_freq;
-		} else {
-			wpa_printf(MSG_DEBUG, "P2P: Try to force us to use frequency (%u MHz) which is already in use",
+		} else*/ {
+			wpa_printf(MSG_INFO, "P2P: Try to force us to use frequency (%u MHz) which is already in use",
 				   best_freq);
 			*force_freq = best_freq;
 		}
@@ -6254,7 +6255,9 @@ int wpas_p2p_deauth_notif(struct wpa_supplicant *wpa_s, const u8 *bssid,
 		p2p_deauth_notif(wpa_s->global->p2p, bssid, reason_code, ie,
 				 ie_len);
 
-	if (reason_code == WLAN_REASON_DEAUTH_LEAVING && !locally_generated &&
+	if ((reason_code == WLAN_REASON_DEAUTH_LEAVING ||
+        reason_code == WLAN_REASON_CLASS3_FRAME_FROM_NONASSOC_STA) &&
+        !locally_generated &&
 	    wpa_s->current_ssid &&
 	    wpa_s->current_ssid->p2p_group &&
 	    wpa_s->current_ssid->mode == WPAS_MODE_INFRA) {

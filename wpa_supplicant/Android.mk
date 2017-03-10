@@ -308,7 +308,7 @@ ifndef CONFIG_L2_PACKET
 CONFIG_L2_PACKET=linux
 endif
 
-OBJS_l2 += src/l2_packet/l2_packet_$(CONFIG_L2_PACKET).c
+OBJS_l2 := src/l2_packet/l2_packet_$(CONFIG_L2_PACKET).c
 
 ifeq ($(CONFIG_L2_PACKET), pcap)
 ifdef CONFIG_WINPCAP
